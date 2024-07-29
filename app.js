@@ -88,25 +88,47 @@ app.post('/register', async (request, response) => {
 //     }
 //   }
 // })
+// app.post('/login', async (request, response) => {
+//   const {username, password} = request.body
+//   const selectUserQuery = `SELECT * FROM user WHERE username = '${username}'`
+//   const dbUser = await db.get(selectUserQuery)
+//   if (dbUser === undefined) {
+//     response.status(400)
+//     response.send('Invalid User')
+//   } else {
+//     const isPasswordMatched = await bcrypt.compare(password, dbUser.password)
+//     if (isPasswordMatched === true) {
+//       const payload = {
+//         username: username,
+//       }
+//       const jwtToken = jwt.sign(payload, 'jwt_token')
+//       response.send({jwtToken})
+//     } else {
+//       response.status(400)
+//       response.send('Invalid Password')
+//     }
+//   }
+// })
 app.post('/login', async (request, response) => {
-  const {username, password} = request.body
-  const selectUserQuery = `SELECT * FROM user WHERE username = '${username}'`
-  const dbUser = await db.get(selectUserQuery)
-  if (dbUser === undefined) {
-    response.status(400)
-    response.send('Invalid User')
-  } else {
-    const isPasswordMatched = await bcrypt.compare(password, dbUser.password)
-    if (isPasswordMatched === true) {
-      const payload = {
-        username: username,
-      }
-      const jwtToken = jwt.sign(payload, 'jwt_token')
-      response.send({jwtToken})
+  try {
+    const {username, password} = request.body
+    const selectUserQuery = `SELECT * FROM user WHERE username = ?`
+    const dbUser = await db.get(selectUserQuery, [username])
+    if (dbUser === undefined) {
+      response.status(400).send({ error: 'Invalid User' })
     } else {
-      response.status(400)
-      response.send('Invalid Password')
+      const isPasswordMatched = await bcrypt.compare(password, dbUser.password)
+      if (isPasswordMatched) {
+        const payload = { username }
+        const jwtToken = jwt.sign(payload, process.env.JWT_SECRET || 'your_secret_key')
+        response.send({ jwtToken })
+      } else {
+        response.status(400).send({ error: 'Invalid Password' })
+      }
     }
+  } catch (error) {
+    console.error('Login error:', error)
+    response.status(500).send({ error: 'Internal Server Error' })
   }
 })
 
