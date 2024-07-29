@@ -5,18 +5,20 @@ get http://localhost:3000/user
 POST http://localhost:3000/register/
 Content-Type:application/json
 {
-  "username": "adam_richard",
-  "name": "Adam Richard",
-  "password": "richard_567",
+  "username": "hrutvik",
+  "name": "Hrutvik Khatkar",
+  "password": "hrutvik@2024",
   "gender": "male",
-  "location": "Detroit"
+  "location": "India"
 }
+GET http://localhost:3000/books?offset=2&limit=3&search_q=the&order_by=price&order=DESC
 
 POST http://localhost:3000/login
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoicmFodWwiLCJnZW5kZXIiOiJNYWxlIiwibG9jYXRpb24iOiJoeWRlcmFiYWQiLCJpYXQiOjE2MTc0MzI0MDd9.Eqevw5QE70ZAVrmOZUc6pflUbeI0ffZUmQLDHYplU8g
 Content-Type : application/json
 {
-  "username": "adam_richard",
-  "password": "richard_567"
+  "username": "hrutvik",
+  "password": "hrutvik@2024"
 }
 
 PUT http://localhost:3000/change-password
