@@ -6,6 +6,7 @@
     "author": "",
     "license": "ISC",
     "dependencies": {
+        "cors": "^2.8.5",
         "bcrypt": "5.0.1",
         "express": "4.17.1",
         "expresss": "^0.0.0",
